@@ -1,0 +1,53 @@
+[
+  {
+    "dataset": "GRAPH_HASHTAG_MEDIUM_with_anomalies.pickle",
+    "algorithm": "CoLA",
+    "epoch": 5,
+    "contamination": 0.1,
+    "gpu": 0,
+    "num_nodes": 846496,
+    "num_edges": 1112995,
+    "num_features": 16,
+    "num_anomalies": 41830,
+    "roc_auc": 0.6429,
+    "average_precision": 0.1635,
+    "recall_at_41830": 0.2066,
+    "outliers_detected": 206150,
+    "threshold": 1.0761,
+    "fit_time_seconds": 2.92
+  },
+  {
+    "dataset": "GRAPH_HASHTAG_MEDIUM_with_anomalies.pickle",
+    "algorithm": "GAE",
+    "epoch": 5,
+    "contamination": 0.1,
+    "gpu": 0,
+    "num_nodes": 846496,
+    "num_edges": 1112995,
+    "num_features": 16,
+    "num_anomalies": 41830,
+    "roc_auc": 0.7645,
+    "average_precision": 0.107,
+    "recall_at_41830": 0.1007,
+    "outliers_detected": 89571,
+    "threshold": 26.1144,
+    "fit_time_seconds": 3.07
+  },
+  {
+    "dataset": "GRAPH_HASHTAG_MEDIUM_with_anomalies.pickle",
+    "algorithm": "OCGNN",
+    "epoch": 5,
+    "contamination": 0.1,
+    "gpu": 0,
+    "num_nodes": 846496,
+    "num_edges": 1112995,
+    "num_features": 16,
+    "num_anomalies": 41830,
+    "roc_auc": 0.2585,
+    "average_precision": 0.0331,
+    "recall_at_41830": 0.0332,
+    "outliers_detected": 145429,
+    "threshold": -4416.6465,
+    "fit_time_seconds": 2.67
+  }
+]

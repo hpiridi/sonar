@@ -1,0 +1,82 @@
+cff-version: 1.2.0
+title: "SONAR: A Large-Scale Social Network Benchmark for Graph-Based Anomaly Detection"
+message: "If you use this software or dataset, please cite it as below."
+type: software
+license:
+  - MIT
+  - CC-BY-4.0
+authors:
+  - family-names: Piridi
+    given-names: Hari Prasad
+    email: p20210102@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Agarwal
+    given-names: Sheyril
+    email: f20212610@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Singh
+    given-names: Anirudh
+    email: f20212499@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Duddupudi
+    given-names: Sailesh
+    email: f20210780@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Yarramsetty
+    given-names: Sanjeeva Sai Preetham
+    email: f20212363@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Shyamendra
+    given-names: Pavan
+    email: f20212245@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Enaganti
+    given-names: Shreya
+    email: f20212131@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Ratra
+    given-names: Vastav
+    email: f20212654@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Upadhyay
+    given-names: Prajna Devi
+    email: prajnad@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Chandra
+    given-names: Priyank
+    email: priyankc@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+  - family-names: Chakraborty
+    given-names: Dipanjan
+    email: dipanjan@hyderabad.bits-pilani.ac.in
+    affiliation: BITS Pilani, Hyderabad Campus
+repository-code: "https://github.com/hpiridi/sonar"
+version: "0.1.0"
+preferred-citation:
+  type: article
+  title: "SONAR: A Large-Scale Social Network Benchmark for Graph-Based Anomaly Detection"
+  authors:
+    - family-names: Piridi
+      given-names: Hari Prasad
+    - family-names: Agarwal
+      given-names: Sheyril
+    - family-names: Singh
+      given-names: Anirudh
+    - family-names: Duddupudi
+      given-names: Sailesh
+    - family-names: Yarramsetty
+      given-names: Sanjeeva Sai Preetham
+    - family-names: Shyamendra
+      given-names: Pavan
+    - family-names: Enaganti
+      given-names: Shreya
+    - family-names: Ratra
+      given-names: Vastav
+    - family-names: Upadhyay
+      given-names: Prajna Devi
+    - family-names: Chandra
+      given-names: Priyank
+    - family-names: Chakraborty
+      given-names: Dipanjan
+  notes: "Submitted to SIGIR 2026"
+  year: 2026
