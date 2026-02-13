@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sonar-graph"
+version = "0.1.0"
+description = "SONAR: A Large-Scale Social Network Benchmark for Graph Anomaly Detection"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+license-files = ["LICENSE", "LICENSE-DATA"]
+authors = [
+    {name = "Hari Prasad Piridi", email = "p20210102@hyderabad.bits-pilani.ac.in"},
+    {name = "Sheyril Agarwal", email = "f20212610@hyderabad.bits-pilani.ac.in"},
+    {name = "Anirudh Singh", email = "f20212499@hyderabad.bits-pilani.ac.in"},
+    {name = "Sailesh Duddupudi", email = "f20210780@hyderabad.bits-pilani.ac.in"},
+    {name = "Sanjeeva Sai Preetham Yarramsetty", email = "f20212363@hyderabad.bits-pilani.ac.in"},
+    {name = "Pavan Shyamendra", email = "f20212245@hyderabad.bits-pilani.ac.in"},
+    {name = "Shreya Enaganti", email = "f20212131@hyderabad.bits-pilani.ac.in"},
+    {name = "Vastav Ratra", email = "f20212654@hyderabad.bits-pilani.ac.in"},
+    {name = "Prajna Devi Upadhyay", email = "prajnad@hyderabad.bits-pilani.ac.in"},
+    {name = "Priyank Chandra", email = "priyankc@hyderabad.bits-pilani.ac.in"},
+    {name = "Dipanjan Chakraborty", email = "dipanjan@hyderabad.bits-pilani.ac.in"},
+]
+keywords = [
+    "graph-neural-networks",
+    "anomaly-detection",
+    "social-network",
+    "benchmark",
+    "pytorch-geometric",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.0.0",
+    "torch-geometric>=2.4.0",
+]
+
+[project.optional-dependencies]
+benchmark = ["pygod>=1.1.0"]
+dev = ["pytest>=7.0", "ruff>=0.4.0"]
+notebooks = ["jupyter", "matplotlib", "seaborn", "pandas"]
+
+[project.urls]
+Homepage = "https://github.com/hpiridi/sonar"
+Documentation = "https://github.com/hpiridi/sonar#readme"
+Paper = "https://arxiv.org/abs/XXXX.XXXXX"
+Issues = "https://github.com/hpiridi/sonar/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sonar"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+markers = ["slow: marks tests that load real datasets (deselect with '-m \"not slow\"')"]
+
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu124" }

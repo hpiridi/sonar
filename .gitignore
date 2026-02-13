@@ -1,0 +1,14 @@
+graphfiles/
+CLAUDE.md
+progress.md
+sigir2026_resource_paper.tex
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+.pytest_cache/
+*.egg
