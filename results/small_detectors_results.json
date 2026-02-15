@@ -168,5 +168,53 @@
     "outliers_detected": 3686,
     "threshold": 0.0,
     "fit_time_seconds": 16.12
+  },
+  {
+    "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
+    "algorithm": "LOF",
+    "epoch": 5,
+    "contamination": 0.1,
+    "gpu": 0,
+    "num_nodes": 36860,
+    "num_edges": 49865,
+    "num_features": 16,
+    "num_anomalies": 1818,
+    "roc_auc": 0.4284,
+    "average_precision": 0.0589,
+    "recall_at_1818": 0.0567,
+    "outliers_detected": 3686,
+    "fit_time_seconds": 1.38
+  },
+  {
+    "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
+    "algorithm": "IF",
+    "epoch": 5,
+    "contamination": 0.1,
+    "gpu": 0,
+    "num_nodes": 36860,
+    "num_edges": 49865,
+    "num_features": 16,
+    "num_anomalies": 1818,
+    "roc_auc": 0.6518,
+    "average_precision": 0.1381,
+    "recall_at_1818": 0.1865,
+    "outliers_detected": 3686,
+    "fit_time_seconds": 0.62
+  },
+  {
+    "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
+    "algorithm": "MLPAE",
+    "epoch": 5,
+    "contamination": 0.1,
+    "gpu": 0,
+    "num_nodes": 36860,
+    "num_edges": 49865,
+    "num_features": 16,
+    "num_anomalies": 1818,
+    "roc_auc": 0.568,
+    "average_precision": 0.0875,
+    "recall_at_1818": 0.1078,
+    "outliers_detected": 3686,
+    "fit_time_seconds": 35.27
   }
 ]

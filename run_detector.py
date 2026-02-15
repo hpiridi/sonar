@@ -5,14 +5,25 @@ import pickle
 import time
 from pathlib import Path
 
-import pygod.detector as detectors
-from pygod.metric import eval_average_precision, eval_recall_at_k, eval_roc_auc
+try:
+    import pygod.detector as detectors
+    from pygod.metric import eval_average_precision, eval_recall_at_k, eval_roc_auc
+except ImportError:
+    detectors = None
 
-AVAILABLE_DETECTORS = [
+PYGOD_DETECTORS = [
     "AdONE", "ANOMALOUS", "AnomalyDAE", "CoLA", "CONAD", "DMGD",
     "DOMINANT", "DONE", "GAAN", "GADNR", "GAE", "GUIDE", "OCGNN",
     "ONE", "Radar", "SCAN",
 ]
+
+PYOD_DETECTORS = {
+    "LOF": ("pyod.models.lof", "LOF"),
+    "IF": ("pyod.models.iforest", "IForest"),
+    "MLPAE": ("pyod.models.auto_encoder", "AutoEncoder"),
+}
+
+AVAILABLE_DETECTORS = PYGOD_DETECTORS + list(PYOD_DETECTORS.keys())
 
 
 def main():
@@ -53,34 +64,75 @@ def main():
     print(f"Algorithm: {args.algorithm}")
     print()
 
-    # Build detector — some detectors (SCAN, Radar) don't accept gpu/epoch/contamination
-    detector_cls = getattr(detectors, args.algorithm)
-    sig_params = inspect.signature(detector_cls.__init__).parameters
-    detector_kwargs = {}
-    if "gpu" in sig_params:
-        detector_kwargs["gpu"] = args.gpu
-    if "verbose" in sig_params:
-        detector_kwargs["verbose"] = 1
-    if "epoch" in sig_params:
-        detector_kwargs["epoch"] = args.epoch
-    if "contamination" in sig_params:
-        detector_kwargs["contamination"] = args.contamination
-    if "batch_size" in sig_params and args.batch_size > 0:
-        detector_kwargs["batch_size"] = args.batch_size
-    detector = detector_cls(**detector_kwargs)
+    is_pyod = args.algorithm in PYOD_DETECTORS
 
-    # Fit
-    t_start = time.time()
-    detector.fit(data)
-    t_fit = time.time() - t_start
+    if not is_pyod and detectors is None:
+        raise ImportError("pygod is required for graph-based detectors. Install with: uv pip install pygod")
 
-    # Predict
-    pred, score = detector.predict(data, return_pred=True, return_score=True)
+    if is_pyod:
+        import importlib
+
+        import torch
+
+        module_path, class_name = PYOD_DETECTORS[args.algorithm]
+        mod = importlib.import_module(module_path)
+        detector_cls = getattr(mod, class_name)
+
+        detector_kwargs = {"contamination": args.contamination}
+        sig_params = inspect.signature(detector_cls.__init__).parameters
+        if "epochs" in sig_params:
+            detector_kwargs["epochs"] = args.epoch
+        if "verbose" in sig_params:
+            detector_kwargs["verbose"] = 1
+
+        detector = detector_cls(**detector_kwargs)
+
+        X = data.x.cpu().numpy()
+        t_start = time.time()
+        detector.fit(X)
+        t_fit = time.time() - t_start
+
+        score = torch.tensor(detector.decision_scores_, dtype=torch.float)
+        pred = torch.tensor(detector.labels_, dtype=torch.long)
+    else:
+        # Build detector — some detectors (SCAN, Radar) don't accept gpu/epoch/contamination
+        detector_cls = getattr(detectors, args.algorithm)
+        sig_params = inspect.signature(detector_cls.__init__).parameters
+        detector_kwargs = {}
+        if "gpu" in sig_params:
+            detector_kwargs["gpu"] = args.gpu
+        if "verbose" in sig_params:
+            detector_kwargs["verbose"] = 1
+        if "epoch" in sig_params:
+            detector_kwargs["epoch"] = args.epoch
+        if "contamination" in sig_params:
+            detector_kwargs["contamination"] = args.contamination
+        if "batch_size" in sig_params and args.batch_size > 0:
+            detector_kwargs["batch_size"] = args.batch_size
+        detector = detector_cls(**detector_kwargs)
+
+        # Fit
+        t_start = time.time()
+        detector.fit(data)
+        t_fit = time.time() - t_start
+
+        # Predict
+        pred, score = detector.predict(data, return_pred=True, return_score=True)
 
     # Metrics
-    roc_auc = eval_roc_auc(labels, score)
-    ap = eval_average_precision(labels, score)
-    recall_at_k = eval_recall_at_k(labels, score, k=k)
+    if is_pyod:
+        from sklearn.metrics import average_precision_score, roc_auc_score
+
+        labels_np = labels.cpu().numpy()
+        score_np = score.cpu().numpy()
+        roc_auc = roc_auc_score(labels_np, score_np)
+        ap = average_precision_score(labels_np, score_np)
+        topk_idx = score_np.argsort()[-k:]
+        recall_at_k = labels_np[topk_idx].sum() / max(labels_np.sum(), 1)
+    else:
+        roc_auc = eval_roc_auc(labels, score)
+        ap = eval_average_precision(labels, score)
+        recall_at_k = eval_recall_at_k(labels, score, k=k)
 
     results = {
         "dataset": dataset_label,
@@ -96,15 +148,18 @@ def main():
         "average_precision": round(float(ap), 4),
         f"recall_at_{k}": round(float(recall_at_k), 4),
         "outliers_detected": int(pred.sum().item()),
-        "threshold": round(float(detector.threshold_), 4),
         "fit_time_seconds": round(t_fit, 2),
     }
+    if not is_pyod:
+        results["threshold"] = round(float(detector.threshold_), 4)
 
     print(f"\nResults:")
     print(f"  ROC-AUC:        {results['roc_auc']:.4f}")
     print(f"  Avg Precision:  {results['average_precision']:.4f}")
     print(f"  Recall@{k}:  {results[f'recall_at_{k}']:.4f}")
     print(f"  Outliers found: {results['outliers_detected']}")
+    if not is_pyod:
+        print(f"  Threshold:      {results['threshold']:.4f}")
     print(f"  Fit time:       {results['fit_time_seconds']}s")
 
     # Save — append to JSON array so multiple runs accumulate
