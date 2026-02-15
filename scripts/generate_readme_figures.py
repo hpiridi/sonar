@@ -6,33 +6,27 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Patch
 
 RESULTS_DIR = Path(__file__).parent.parent / "results"
 ASSETS_DIR = Path(__file__).parent.parent / "assets"
 ASSETS_DIR.mkdir(exist_ok=True)
 
-# Color palette
-COLORS = {
-    "primary": "#2563EB",
-    "secondary": "#7C3AED",
-    "accent": "#059669",
-    "warning": "#D97706",
-    "muted": "#94A3B8",
-    "bg": "#FFFFFF",
-    "text": "#1E293B",
+# BOND-style detector categories
+CATEGORIES = {
+    "Non-graph": ["LOF", "IF", "MLPAE"],
+    "Classical Graph": ["SCAN", "Radar", "ANOMALOUS"],
+    "Deep Graph": [
+        "AdONE", "AnomalyDAE", "CoLA", "CONAD", "DMGD",
+        "DOMINANT", "DONE", "GAAN", "GADNR", "GAE",
+        "GUIDE", "OCGNN", "ONE",
+    ],
 }
 
-DETECTOR_COLORS = {
-    "AdONE": "#2563EB",
-    "DONE": "#3B82F6",
-    "GAE": "#7C3AED",
-    "ANOMALOUS": "#059669",
-    "DOMINANT": "#10B981",
-    "CONAD": "#D97706",
-    "AnomalyDAE": "#F59E0B",
-    "ONE": "#EF4444",
-    "CoLA": "#F87171",
-    "OCGNN": "#94A3B8",
+CAT_COLORS = {
+    "Deep Graph": "#4CAF50",
+    "Classical Graph": "#2196F3",
+    "Non-graph": "#FF9800",
 }
 
 SCALE_COLORS = {
@@ -42,49 +36,49 @@ SCALE_COLORS = {
 }
 
 
+def get_category(algo):
+    for cat, algos in CATEGORIES.items():
+        if algo in algos:
+            return cat
+    return "Deep Graph"
+
+
 def load_results(name):
     with open(RESULTS_DIR / f"{name}_detectors_results.json") as f:
         return json.load(f)
 
 
 def fig_benchmark_small():
-    """Bar chart: all 10 detectors on small dataset, ROC-AUC + AP side by side."""
+    """Bar chart: all 16 detectors on small dataset, ROC-AUC only."""
     results = load_results("small")
     results.sort(key=lambda r: r["roc_auc"], reverse=True)
 
-    detectors = [r["algorithm"] for r in results]
+    algorithms = [r["algorithm"] for r in results]
     roc_auc = [r["roc_auc"] for r in results]
-    ap = [r["average_precision"] for r in results]
+    colors = [CAT_COLORS[get_category(a)] for a in algorithms]
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(8, 6))
 
-    x = np.arange(len(detectors))
-    width = 0.35
+    x = np.arange(len(algorithms))
+    bars = ax.barh(x, roc_auc, color=colors, edgecolor="white", linewidth=0.5)
+    ax.set_yticks(x)
+    ax.set_yticklabels(algorithms, fontsize=11)
+    ax.set_xlabel("ROC-AUC", fontsize=12, fontweight="bold")
+    ax.set_xlim(0, 1.0)
+    ax.invert_yaxis()
+    ax.grid(axis="x", alpha=0.3)
 
-    bars1 = ax.bar(x - width / 2, roc_auc, width, label="ROC-AUC",
-                   color="#2563EB", edgecolor="white", linewidth=0.5, zorder=3)
-    bars2 = ax.bar(x + width / 2, ap, width, label="Avg Precision",
-                   color="#7C3AED", edgecolor="white", linewidth=0.5, zorder=3)
+    for bar, val in zip(bars, roc_auc):
+        ax.text(val + 0.01, bar.get_y() + bar.get_height() / 2,
+                f"{val:.3f}", va="center", fontsize=10)
 
-    # Value labels on ROC-AUC bars
-    for bar, val in zip(bars1, roc_auc):
-        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.015,
-                f"{val:.2f}", ha="center", va="bottom", fontsize=8,
-                fontweight="bold", color="#1E293B")
+    legend_elements = [Patch(facecolor=c, label=l) for l, c in CAT_COLORS.items()]
+    ax.legend(handles=legend_elements, loc="lower right", fontsize=10, frameon=True)
 
-    ax.set_ylabel("Score", fontsize=12, fontweight="bold")
-    ax.set_title("SONAR Small — 10 PyGOD Detectors", fontsize=14, fontweight="bold", pad=15)
-    ax.set_xticks(x)
-    ax.set_xticklabels(detectors, fontsize=10, rotation=30, ha="right")
-    ax.set_ylim(0, 1.05)
-    ax.legend(fontsize=11, loc="upper right")
-    ax.grid(axis="y", alpha=0.3, zorder=0)
-    ax.set_axisbelow(True)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-
+    ax.set_title(f"SONAR-Small Benchmark: ROC-AUC ({len(algorithms)} Detectors)",
+                 fontsize=13, fontweight="bold")
     plt.tight_layout()
-    fig.savefig(ASSETS_DIR / "benchmark_small.png", dpi=200, bbox_inches="tight",
+    fig.savefig(ASSETS_DIR / "benchmark_small.png", dpi=150, bbox_inches="tight",
                 facecolor="white")
     plt.close()
     print("  Saved assets/benchmark_small.png")
@@ -132,7 +126,7 @@ def fig_scalability():
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
 
-    fig.suptitle("Scalability — Only 3 of 10 Detectors Handle Medium & Large Graphs",
+    fig.suptitle("Scalability — Only 3 of 16 Detectors Handle Medium & Large Graphs",
                  fontsize=14, fontweight="bold", y=1.02)
     plt.tight_layout()
     fig.savefig(ASSETS_DIR / "scalability.png", dpi=200, bbox_inches="tight",
@@ -143,7 +137,6 @@ def fig_scalability():
 
 def fig_scale_comparison():
     """Visual showing SONAR scale vs social network GAD benchmarks from the paper."""
-    # Datasets from paper Table 1 (comparison with existing social network benchmarks)
     benchmarks = [
         ("Cresci-15", 5301),
         ("TwiBot-20", 229580),
@@ -185,7 +178,6 @@ def fig_scale_comparison():
     ax.spines["right"].set_visible(False)
     ax.set_xlim(right=users[-1] * 8)
 
-    # Add annotation
     ax.annotate("3.8x larger than TwiBot-22\n+ 7 relation types + dual labels",
                 xy=(3797980, 6), fontsize=9.5, fontweight="bold",
                 color="#DC2626", ha="left",

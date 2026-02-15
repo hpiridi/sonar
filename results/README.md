@@ -6,7 +6,7 @@ Pre-computed benchmark results from running PyGOD detectors on SONAR graphs.
 
 | File | Description |
 |------|-------------|
-| `small_detectors_results.json` | All 10 detectors on the small graph (36,860 nodes) |
+| `small_detectors_results.json` | All 16 detectors on the small graph (36,860 nodes) |
 | `medium_detectors_results.json` | Scalable detectors on the medium graph (846,496 nodes) |
 | `large_detectors_results.json` | Scalable detectors on the large graph (7,410,001 nodes) |
 
@@ -20,7 +20,7 @@ Each JSON file contains an array of result objects with the following fields:
   "algorithm": "detector name",
   "epoch": 5,
   "contamination": 0.1,
-  "gpu": 0,
+  "device": "cuda:0",
   "num_nodes": 36860,
   "num_edges": 49865,
   "num_features": 16,

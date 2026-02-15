@@ -139,32 +139,40 @@ data = dataset[0]
 
 ## Benchmark Results
 
-We benchmark 10 PyGOD detectors spanning matrix factorization and GNN-based approaches on SONAR-Small:
+We benchmark 16 detectors spanning deep graph, classical graph, and non-graph approaches on SONAR-Small:
 
 <p align="center">
   <img src="assets/benchmark_small.png" alt="Benchmark Results" width="85%">
 </p>
 
-| Type | Detector | ROC-AUC | Avg Precision | Recall@k | Time (s) |
-|------|----------|--------:|--------------:|---------:|---------:|
-| Matrix Factor. | **ANOMALOUS** | 0.7997 | **0.4305** | **0.4455** | 11.76 |
-| | ONE | 0.5705 | 0.1257 | 0.1430 | 17.79 |
-| GNN-based | **AdONE** | **0.8459** | 0.1672 | 0.0875 | 16.12 |
-| | DONE | 0.8407 | 0.1599 | 0.0721 | 15.92 |
-| | GCNAE (GAE) | 0.8025 | 0.1806 | 0.1518 | 0.80 |
-| | DOMINANT | 0.7384 | 0.0825 | 0.0286 | 15.85 |
-| | CONAD | 0.7375 | 0.0824 | 0.0292 | 24.84 |
-| | AnomalyDAE | 0.6858 | 0.2569 | 0.3388 | 16.15 |
-| | CoLA | 0.3528 | 0.0544 | 0.1194 | 0.79 |
-| | OCGNN | 0.2294 | 0.0315 | 0.0270 | 0.92 |
+| Type | Detector | ROC-AUC | Avg Precision | Recall@k | Time (s) | Device |
+|------|----------|--------:|--------------:|---------:|---------:|--------|
+| Deep Graph | **AdONE** | **0.8459** | 0.1672 | 0.0875 | 16.12 | GPU |
+| | DONE | 0.8407 | 0.1599 | 0.0721 | 15.92 | GPU |
+| | GCNAE (GAE) | 0.8025 | 0.1806 | 0.1518 | 0.80 | GPU |
+| | DOMINANT | 0.7384 | 0.0825 | 0.0286 | 15.85 | GPU |
+| | CONAD | 0.7375 | 0.0824 | 0.0292 | 24.84 | GPU |
+| | AnomalyDAE | 0.6858 | 0.2569 | 0.3388 | 16.15 | GPU |
+| | DMGD | 0.6366 | 0.0646 | 0.0237 | 140.81 | CPU |
+| | ONE | 0.5705 | 0.1257 | 0.1430 | 17.79 | GPU |
+| | CoLA | 0.3528 | 0.0544 | 0.1194 | 0.79 | GPU |
+| | OCGNN | 0.2294 | 0.0315 | 0.0270 | 0.92 | GPU |
+| Classical Graph | **ANOMALOUS** | 0.7997 | 0.4305 | 0.4455 | 11.76 | GPU |
+| | **Radar** | 0.7997 | 0.4305 | 0.4455 | 207.45 | CPU |
+| | **SCAN** | 0.7526 | **0.5223** | **0.5198** | 44.97 | GPU |
+| Non-graph | IF | 0.6518 | 0.1381 | 0.1865 | 0.62 | CPU |
+| | MLPAE | 0.5680 | 0.0875 | 0.1078 | 35.27 | CPU |
+| | LOF | 0.4284 | 0.0589 | 0.0567 | 1.38 | CPU |
 
-> **Note**: PyGOD's `GAE` implements a GCN-based autoencoder (GCNAE), not the variational GAE from Kipf & Welling (2016).
+> **Note**: PyGOD's `GAE` implements a GCN-based autoencoder (GCNAE), not the variational GAE from Kipf & Welling (2016). DMGD and Radar ran on CPU due to GPU OOM. Three detectors (GAAN, GADNR, GUIDE) are excluded due to OOM or version incompatibility.
 
 ### Key Findings
 
-- **Matrix factorization excels at precision**: ANOMALOUS achieves the highest AP (43.05%) and Recall (44.55%), demonstrating that joint attribute-network modeling effectively captures both structural and contextual anomalies.
-- **GNN methods lead on ranking**: AdONE and DONE achieve the best ROC-AUC (84.59%, 84.07%), indicating that outlier-aware deep autoencoders with adversarial training produce superior anomaly rankings despite lower precision.
-- **Efficiency varies 31x**: CoLA completes in 0.79s while CONAD requires 24.84s, highlighting significant runtime-accuracy trade-offs.
+- **Deep graph methods lead on ranking but not precision**: AdONE and DONE achieve the best ROC-AUC (84.59%, 84.07%), indicating strong overall separation between anomalies and normals. However, their AP (16.72%, 15.99%) and Recall@k (8.75%, 7.21%) are significantly lower, revealing that deep autoencoders produce smooth, continuous anomaly scores that rank well in aggregate but fail to concentrate true anomalies at the top of the prediction list.
+- **Classical graph methods excel at precision**: SCAN achieves the highest AP (52.23%) and Recall@k (51.98%) despite a lower ROC-AUC (75.26%). Its discrete structural clustering produces fewer but more precise predictions (933 outliers detected vs. AdONE's 3,686), making it more suitable for practical settings where analysts investigate top-k alerts. ANOMALOUS and Radar both reach ROC-AUC of 0.80 with AP of 43.05%, showing that classical graph-aware methods effectively capture both structural and contextual anomalies.
+- **ROC-AUC alone is misleading for anomaly detection**: The divergence between ROC-AUC and AP/Recall@k across detectors highlights the importance of evaluating with multiple metrics. A detector with high ROC-AUC may still produce many false positives at any practical operating threshold, while a lower-ROC-AUC detector like SCAN can be far more actionable.
+- **Non-graph baselines provide context**: Isolation Forest (ROC-AUC 0.65) and MLPAE (0.57) show that feature-only methods capture some signal, but graph-aware methods substantially outperform them, validating the importance of relational structure.
+- **Efficiency varies 228x**: IF completes in 0.62s while Radar requires 207.45s (on CPU), highlighting significant runtime-accuracy trade-offs across method types.
 
 See `results/` for full JSON results.
 
@@ -177,7 +185,7 @@ Run a single detector:
 uv run python run_detector.py --dataset-name small --algorithm DOMINANT --epoch 5
 ```
 
-Run all 10 detectors:
+Run all detectors:
 ```bash
 bash run_all.sh
 ```
@@ -205,7 +213,7 @@ results/                    # Pre-computed benchmark results (JSON)
 benchmarks/configs/         # Hyperparameter configurations
 scripts/                    # Data conversion utilities
 run_detector.py             # CLI benchmark runner
-run_all.sh                  # Run all 10 detectors
+run_all.sh                  # Run all detectors
 ```
 
 ---
