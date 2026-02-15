@@ -46,20 +46,23 @@ dependencies = [
     "torch-geometric>=2.4.0",
     "pygod>=1.1.0",
     "pyod>=2.0.0",
-    "torch-sparse",
-    "torch-scatter",
-    "pytest>=7.0",
-    "ruff>=0.4.0",
-    "jupyter",
     "matplotlib",
     "seaborn",
     "pandas",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "torch-sparse",
+    "torch-scatter",
+    "pytest>=7.0",
+    "ruff>=0.4.0",
+    "jupyter",
+]
+
 [project.urls]
 Homepage = "https://github.com/hpiridi/sonar"
 Documentation = "https://github.com/hpiridi/sonar#readme"
-Paper = "https://arxiv.org/abs/XXXX.XXXXX"
 Issues = "https://github.com/hpiridi/sonar/issues"
 
 [tool.hatch.build.targets.wheel]
