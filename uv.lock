@@ -3609,36 +3609,41 @@ name = "sonar-graph"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "jupyter" },
     { name = "matplotlib" },
     { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "pandas", version = "3.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pygod" },
     { name = "pyod" },
-    { name = "pytest" },
-    { name = "ruff" },
     { name = "seaborn" },
     { name = "torch" },
     { name = "torch-geometric" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "jupyter" },
+    { name = "pytest" },
+    { name = "ruff" },
     { name = "torch-scatter" },
     { name = "torch-sparse" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "jupyter" },
+    { name = "jupyter", marker = "extra == 'dev'" },
     { name = "matplotlib" },
     { name = "pandas" },
     { name = "pygod", specifier = ">=1.1.0" },
     { name = "pyod", specifier = ">=2.0.0" },
-    { name = "pytest", specifier = ">=7.0" },
-    { name = "ruff", specifier = ">=0.4.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.4.0" },
     { name = "seaborn" },
     { name = "torch", specifier = ">=2.0.0", index = "https://download.pytorch.org/whl/cu124" },
     { name = "torch-geometric", specifier = ">=2.4.0" },
-    { name = "torch-scatter" },
-    { name = "torch-sparse" },
+    { name = "torch-scatter", marker = "extra == 'dev'" },
+    { name = "torch-sparse", marker = "extra == 'dev'" },
 ]
+provides-extras = ["dev"]
 
 [[package]]
 name = "soupsieve"
