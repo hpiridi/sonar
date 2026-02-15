@@ -226,7 +226,7 @@ run_all.sh                  # Run all detectors
 | **Medium** | Contact authors (see below) | ~1.5 GB |
 | **Large** | Contact authors (see below) | ~12 GB |
 
-For medium and large variants, contact:
+The medium and large datasets exceed GitHub's LFS file size limits, so they cannot be hosted on GitHub. To access them, please contact the authors:
 - **Hari Prasad Piridi** — p20210102@hyderabad.bits-pilani.ac.in
 - **Dipanjan Chakraborty** — dipanjan@hyderabad.bits-pilani.ac.in
 
