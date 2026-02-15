@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - run: uv sync --frozen --extra dev
+      - run: uv sync --frozen
       - run: uv run ruff check sonar/
 
   test:
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - run: uv sync --frozen --extra dev
+      - run: uv sync --frozen
       - run: uv run pytest tests/ -m "not slow" -v
 
   test-slow:
@@ -29,5 +29,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - run: uv sync --frozen --extra dev --extra benchmark
+      - run: uv sync --frozen
       - run: uv run pytest tests/ -v

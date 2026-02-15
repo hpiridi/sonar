@@ -95,26 +95,44 @@ def main():
         score = torch.tensor(detector.decision_scores_, dtype=torch.float)
         pred = torch.tensor(detector.labels_, dtype=torch.long)
     else:
+        import torch
+
         # Build detector — some detectors (SCAN, Radar) don't accept gpu/epoch/contamination
         detector_cls = getattr(detectors, args.algorithm)
         sig_params = inspect.signature(detector_cls.__init__).parameters
-        detector_kwargs = {}
-        if "gpu" in sig_params:
-            detector_kwargs["gpu"] = args.gpu
-        if "verbose" in sig_params:
-            detector_kwargs["verbose"] = 1
-        if "epoch" in sig_params:
-            detector_kwargs["epoch"] = args.epoch
-        if "contamination" in sig_params:
-            detector_kwargs["contamination"] = args.contamination
-        if "batch_size" in sig_params and args.batch_size > 0:
-            detector_kwargs["batch_size"] = args.batch_size
-        detector = detector_cls(**detector_kwargs)
 
-        # Fit
-        t_start = time.time()
-        detector.fit(data)
-        t_fit = time.time() - t_start
+        def _build_detector(gpu):
+            kwargs = {}
+            if "gpu" in sig_params:
+                kwargs["gpu"] = gpu
+            if "verbose" in sig_params:
+                kwargs["verbose"] = 1
+            if "epoch" in sig_params:
+                kwargs["epoch"] = args.epoch
+            if "contamination" in sig_params:
+                kwargs["contamination"] = args.contamination
+            if "batch_size" in sig_params and args.batch_size > 0:
+                kwargs["batch_size"] = args.batch_size
+            return detector_cls(**kwargs)
+
+        gpu = args.gpu
+        detector = _build_detector(gpu)
+
+        # Fit with automatic CPU fallback on GPU OOM
+        try:
+            t_start = time.time()
+            detector.fit(data)
+            t_fit = time.time() - t_start
+        except torch.cuda.OutOfMemoryError:
+            if gpu == -1:
+                raise
+            print(f"GPU OOM for {args.algorithm}, retrying on CPU...")
+            torch.cuda.empty_cache()
+            gpu = -1
+            detector = _build_detector(gpu)
+            t_start = time.time()
+            detector.fit(data)
+            t_fit = time.time() - t_start
 
         # Predict
         pred, score = detector.predict(data, return_pred=True, return_score=True)
@@ -139,7 +157,7 @@ def main():
         "algorithm": args.algorithm,
         "epoch": args.epoch,
         "contamination": args.contamination,
-        "gpu": args.gpu,
+        "device": "cpu" if (is_pyod or gpu == -1) else f"cuda:{gpu}",
         "num_nodes": data.num_nodes,
         "num_edges": data.num_edges,
         "num_features": data.x.shape[1],

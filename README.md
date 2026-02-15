@@ -100,11 +100,6 @@ SONAR injects two complementary anomaly types at a 5% rate:
 pip install sonar-graph
 ```
 
-With benchmark support (PyGOD):
-```bash
-pip install "sonar-graph[benchmark]"
-```
-
 ---
 
 ## Quick Start

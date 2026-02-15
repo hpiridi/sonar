@@ -4,7 +4,6 @@
     "algorithm": "ANOMALOUS",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -14,14 +13,14 @@
     "recall_at_1818": 0.4455,
     "outliers_detected": 3686,
     "threshold": 7.1174,
-    "fit_time_seconds": 11.76
+    "fit_time_seconds": 11.76,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "AnomalyDAE",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -31,14 +30,14 @@
     "recall_at_1818": 0.3388,
     "outliers_detected": 1670,
     "threshold": 327.1378,
-    "fit_time_seconds": 16.15
+    "fit_time_seconds": 16.15,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "CoLA",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -48,14 +47,14 @@
     "recall_at_1818": 0.1194,
     "outliers_detected": 3679,
     "threshold": 0.4792,
-    "fit_time_seconds": 0.79
+    "fit_time_seconds": 0.79,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "CONAD",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -65,14 +64,14 @@
     "recall_at_1818": 0.0292,
     "outliers_detected": 3581,
     "threshold": 89122.7109,
-    "fit_time_seconds": 24.84
+    "fit_time_seconds": 24.84,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "DOMINANT",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -82,14 +81,14 @@
     "recall_at_1818": 0.0286,
     "outliers_detected": 4810,
     "threshold": 75680.2109,
-    "fit_time_seconds": 15.85
+    "fit_time_seconds": 15.85,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "DONE",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -99,14 +98,14 @@
     "recall_at_1818": 0.0721,
     "outliers_detected": 3686,
     "threshold": 0.0,
-    "fit_time_seconds": 15.92
+    "fit_time_seconds": 15.92,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "GAE",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -116,14 +115,14 @@
     "recall_at_1818": 0.1518,
     "outliers_detected": 2754,
     "threshold": 15.6152,
-    "fit_time_seconds": 0.8
+    "fit_time_seconds": 0.8,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "OCGNN",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -133,14 +132,14 @@
     "recall_at_1818": 0.027,
     "outliers_detected": 5076,
     "threshold": -231.5071,
-    "fit_time_seconds": 0.92
+    "fit_time_seconds": 0.92,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "ONE",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -150,14 +149,14 @@
     "recall_at_1818": 0.143,
     "outliers_detected": 3686,
     "threshold": 0.0,
-    "fit_time_seconds": 17.79
+    "fit_time_seconds": 17.79,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "AdONE",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -167,14 +166,14 @@
     "recall_at_1818": 0.0875,
     "outliers_detected": 3686,
     "threshold": 0.0,
-    "fit_time_seconds": 16.12
+    "fit_time_seconds": 16.12,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "LOF",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -183,14 +182,14 @@
     "average_precision": 0.0589,
     "recall_at_1818": 0.0567,
     "outliers_detected": 3686,
-    "fit_time_seconds": 1.38
+    "fit_time_seconds": 1.38,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "IF",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -199,14 +198,14 @@
     "average_precision": 0.1381,
     "recall_at_1818": 0.1865,
     "outliers_detected": 3686,
-    "fit_time_seconds": 0.62
+    "fit_time_seconds": 0.62,
+    "device": "cuda:0"
   },
   {
     "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
     "algorithm": "MLPAE",
     "epoch": 5,
     "contamination": 0.1,
-    "gpu": 0,
     "num_nodes": 36860,
     "num_edges": 49865,
     "num_features": 16,
@@ -215,6 +214,58 @@
     "average_precision": 0.0875,
     "recall_at_1818": 0.1078,
     "outliers_detected": 3686,
-    "fit_time_seconds": 35.27
+    "fit_time_seconds": 35.27,
+    "device": "cuda:0"
+  },
+  {
+    "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
+    "algorithm": "SCAN",
+    "epoch": 5,
+    "contamination": 0.1,
+    "num_nodes": 36860,
+    "num_edges": 49865,
+    "num_features": 16,
+    "num_anomalies": 1818,
+    "roc_auc": 0.7526,
+    "average_precision": 0.5223,
+    "recall_at_1818": 0.5198,
+    "outliers_detected": 933,
+    "fit_time_seconds": 44.97,
+    "threshold": 0.0,
+    "device": "cuda:0"
+  },
+  {
+    "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
+    "algorithm": "DMGD",
+    "epoch": 5,
+    "contamination": 0.1,
+    "num_nodes": 36860,
+    "num_edges": 49865,
+    "num_features": 36860,
+    "num_anomalies": 1818,
+    "roc_auc": 0.6366,
+    "average_precision": 0.0646,
+    "recall_at_1818": 0.0237,
+    "outliers_detected": 3660,
+    "fit_time_seconds": 140.81,
+    "threshold": 1.5527,
+    "device": "cpu"
+  },
+  {
+    "dataset": "GRAPH_HASHTAG_SMALL_with_anomalies.pickle",
+    "algorithm": "Radar",
+    "epoch": 5,
+    "contamination": 0.1,
+    "device": "cpu",
+    "num_nodes": 36860,
+    "num_edges": 49865,
+    "num_features": 16,
+    "num_anomalies": 1818,
+    "roc_auc": 0.7997,
+    "average_precision": 0.4305,
+    "recall_at_1818": 0.4455,
+    "outliers_detected": 3686,
+    "fit_time_seconds": 207.45,
+    "threshold": 7.1172
   }
 ]

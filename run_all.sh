@@ -49,7 +49,7 @@ sys.exit(0 if any(r.get('algorithm') == '$det' and r.get('dataset') == '$DATASET
     echo "============================================================"
     echo "Running $det ..."
     echo "============================================================"
-    uv run --extra benchmark python run_detector.py \
+    uv run python run_detector.py \
         --dataset "$DATASET" \
         --algorithm "$det" \
         --output "$OUTPUT" \
