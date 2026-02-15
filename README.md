@@ -97,7 +97,19 @@ SONAR injects two complementary anomaly types at a 5% rate:
 ## Installation
 
 ```bash
+# Install PyTorch first (see https://pytorch.org/get-started)
+pip install torch
+
+# Then install sonar-graph
 pip install sonar-graph
+```
+
+For development (includes torch-sparse, torch-scatter, pytest, ruff, jupyter):
+
+```bash
+git clone https://github.com/hpiridi/sonar.git
+cd sonar
+pip install -e ".[dev]"
 ```
 
 ---
