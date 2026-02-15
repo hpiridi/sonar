@@ -3,7 +3,7 @@ set -e
 
 DATASET="${1:-graphfiles/GRAPH_HASHTAG_SMALL_with_anomalies.pickle}"
 OUTPUT="${2:-results/all_detectors_results.json}"
-EPOCHS=5
+EPOCHS=100
 GPU=0
 
 echo "Dataset: $DATASET"
