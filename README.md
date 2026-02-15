@@ -217,7 +217,7 @@ Benchmark configurations (epoch, contamination, detector list) are documented in
 sonar/                      # Python package (pip install sonar-graph)
   dataset.py                # PyG InMemoryDataset loader with auto-download
   utils.py                  # evaluate_detector(), dataset_summary()
-tests/                      # pytest suite (17 fast + 4 slow tests)
+tests/                      # pytest suite (17 fast + 8 slow tests)
 notebooks/
   quickstart.ipynb          # Load, explore, detect, evaluate
   benchmark_analysis.ipynb  # Reproduce paper tables and figures
