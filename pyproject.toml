@@ -47,7 +47,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-benchmark = ["pygod>=1.1.0"]
+benchmark = ["pygod>=1.1.0", "pyod>=2.0.0"]
 dev = ["pytest>=7.0", "ruff>=0.4.0"]
 notebooks = ["jupyter", "matplotlib", "seaborn", "pandas"]
 
